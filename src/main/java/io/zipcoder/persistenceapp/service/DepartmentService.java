@@ -37,11 +37,10 @@ public class DepartmentService {
     
     public Department setDepartmentManager(Long departmentId, Long managerId) {
         Optional<Department> dept = departmentRepository.findById(departmentId);
-        Optional<Employee> manager = employeeRepository.findById(managerId);
         
-        if (dept.isPresent() && manager.isPresent()) {
+        if (dept.isPresent()) {
             Department department = dept.get();
-            department.setDepartmentManager(manager.get());
+            department.setManagerId(managerId);
             return departmentRepository.save(department);
         }
         return null;
@@ -65,10 +64,16 @@ public class DepartmentService {
             Department departmentA = deptA.get();
             Department departmentB = deptB.get();
             
-            Employee managerB = departmentB.getDepartmentManager();
-            if (managerB != null) {
-                managerB.setManager(departmentA.getDepartmentManager());
-                employeeRepository.save(managerB);
+            if (departmentB.getManagerId() != null) {
+                Optional<Employee> managerB = employeeRepository.findById(departmentB.getManagerId());
+                if (managerB.isPresent() && departmentA.getManagerId() != null) {
+                    Optional<Employee> managerA = employeeRepository.findById(departmentA.getManagerId());
+                    if (managerA.isPresent()) {
+                        Employee empB = managerB.get();
+                        empB.setManager(managerA.get());
+                        employeeRepository.save(empB);
+                    }
+                }
             }
             
             List<Employee> employeesInB = employeeRepository.findByDepartment_DepartmentNumber(departmentB.getDepartmentNumber());
