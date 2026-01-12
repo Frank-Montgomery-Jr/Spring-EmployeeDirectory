@@ -15,14 +15,11 @@ public class Department {
     @Column(name = "department_name")
     private String departmentName;
     
-    @OneToOne
-    @JoinColumn(name = "manager_id")
-    private Employee departmentManager;
+    @Column(name = "manager_id")
+    private Long managerId;
     
-    // Constructors
     public Department() {}
     
-    // Getters and Setters
     public Long getDepartmentNumber() {
         return departmentNumber;
     }
@@ -39,11 +36,11 @@ public class Department {
         this.departmentName = departmentName;
     }
     
-    public Employee getDepartmentManager() {
-        return departmentManager;
+    public Long getManagerId() {
+        return managerId;
     }
     
-    public void setDepartmentManager(Employee departmentManager) {
-        this.departmentManager = departmentManager;
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 }
